@@ -80,7 +80,7 @@ bool CatalogScene::init()
     Vector<MenuItem*> menuItems;
     menuItems.pushBack(closeItem);
     
-    int CatelogCount = 2;
+    int CatelogCount = 1;
     
     static const Color3B MenuItemColor = Color3B::BLACK;
     

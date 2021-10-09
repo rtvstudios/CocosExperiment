@@ -40,6 +40,8 @@ varying vec2 v_texCoord;
 
 uniform sampler2D u_texture;
 
+uniform float u_blurFactor;
+
 const float pointRange = 10.0f;
 const float jump = 2.0f;
 
@@ -51,8 +53,8 @@ void main()
 
     for(float u = -pointRange; u < pointRange ; u+=jump) {
         for(float v = -pointRange ; v < pointRange ; v+=jump) {
-            point.x = v_texCoord.x  + u * 0.002f;
-            point.y = v_texCoord.y  + v * 0.002f;
+            point.x = v_texCoord.x  + u * u_blurFactor;
+            point.y = v_texCoord.y  + v * u_blurFactor;
 
             // If the point is within the range[0, 1]
             if (point.y >= 0.0f && point.x >= 0.0f &&
@@ -85,14 +87,37 @@ bool BlurScene::init() {
     auto sprite = Sprite::create("HelloWorld.png");
     auto program = backend::Device::getInstance()->newProgram(positionTextureColor_vert,
                                                               positionTextureColor_frag);
-    sprite->setProgramState(new backend::ProgramState(program));
-    float x = origin.x + visibleSize.width/2 - sprite->getContentSize().width/2;
-    float y = origin.y + visibleSize.height/2 - sprite->getContentSize().height/2;
-    sprite->setPosition(Vec2(x,y));
+    auto programState = new backend::ProgramState(program);
+    sprite->setProgramState(programState);
+    auto uniformLocation = programState->getUniformLocation("u_blurFactor");
+    backend::ProgramState::UniformCallback callback = [this](backend::ProgramState *programState,
+                                      const backend::UniformLocation &location) {
+  
+        programState->setUniform(location, &mBlurFactor, sizeof(float));
+    };
+    
+    programState->setCallbackUniform(uniformLocation, callback);
+
     sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+    sprite->setContentSize(sprite->getContentSize()*2);
+    
+    float x = visibleSize.width/2 - sprite->getContentSize().width/2;
+    float y = visibleSize.height/2 - sprite->getContentSize().height/2;
+    sprite->setPosition(Vec2(x, y));
+    
     this->addChild(sprite);
     
+    scheduleUpdate();
+
     return true;
+}
+
+void BlurScene::update(float delta) {
+    Scene::update(delta);
+    mBlurFactor += mBlurFactorDelta;
+    if (std::abs(mBlurFactor) > mBlurFactorMax) {
+        mBlurFactorDelta = mBlurFactorDelta * -1;
+    }
 }
 
 
