@@ -23,7 +23,9 @@
  ****************************************************************************/
 
 #include "CatalogScene.h"
+
 #include "BlurScene.h"
+#include "CustomNodeScene.h"
 
 USING_NS_CC;
 
@@ -80,7 +82,7 @@ bool CatalogScene::init()
     Vector<MenuItem*> menuItems;
     menuItems.pushBack(closeItem);
     
-    int CatelogCount = 1;
+    int CatelogCount = 2;
     
     static const Color3B MenuItemColor = Color3B::BLACK;
     
@@ -102,11 +104,16 @@ bool CatalogScene::init()
     }
     
     if (CatelogCount-- > 0) {
-        auto *customMaterialScene = MenuItemFont::create("Material");
+        auto *customNodeScene = MenuItemFont::create("Custom Node", [](Ref *) {
+            Director::getInstance()->replaceScene(TransitionFade::create(0.5f,
+                                                                         CustomNodeScene::create(),
+                                                                         Color3B::WHITE));
+        });
+        
         itemStartPos.set(0, itemStartPos.y - deltaHeight);
-        customMaterialScene->setPosition(itemStartPos);
-        menuItems.pushBack(customMaterialScene);
-        customMaterialScene->setColor(MenuItemColor);
+        customNodeScene->setPosition(itemStartPos);
+        menuItems.pushBack(customNodeScene);
+        customNodeScene->setColor(MenuItemColor);
     }
 
     auto menu = Menu::createWithArray(menuItems);
