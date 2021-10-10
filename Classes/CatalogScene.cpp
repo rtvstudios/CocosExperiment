@@ -90,7 +90,7 @@ bool CatalogScene::init()
     float deltaHeight = 0;
     
     if (CatelogCount-- > 0) {
-        auto *blurScene = MenuItemFont::create("Blur Scene", [](Ref *) {
+        auto *blurScene = MenuItemFont::create("Blured Texture", [](Ref *) {
             Director::getInstance()->replaceScene(TransitionFade::create(0.5f,
                                                                          BlurScene::create(),
                                                                          Color3B::WHITE));
