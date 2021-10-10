@@ -141,6 +141,8 @@ bool CustomNodeScene::init() {
     circleNode->setScale(2.0f);
     this->addChild(circleNode);
     
+    circleNode->runAction(RepeatForever::create(RotateBy::create(1.0f, 30)));
+
     return true;
 }
 
