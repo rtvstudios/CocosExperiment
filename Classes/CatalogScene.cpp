@@ -90,7 +90,7 @@ bool CatalogScene::init()
     float deltaHeight = 0;
     
     if (CatelogCount-- > 0) {
-        auto *blurScene = MenuItemFont::create("Blured Texture", [](Ref *) {
+        auto *blurScene = MenuItemFont::create("Custom Shaders - Blured Texture", [](Ref *) {
             Director::getInstance()->replaceScene(TransitionFade::create(0.5f,
                                                                          BlurScene::create(),
                                                                          Color3B::WHITE));
@@ -104,7 +104,7 @@ bool CatalogScene::init()
     }
     
     if (CatelogCount-- > 0) {
-        auto *customNodeScene = MenuItemFont::create("Custom Node", [](Ref *) {
+        auto *customNodeScene = MenuItemFont::create("Custom Node - Draws Circle", [](Ref *) {
             Director::getInstance()->replaceScene(TransitionFade::create(0.5f,
                                                                          CustomNodeScene::create(),
                                                                          Color3B::WHITE));
